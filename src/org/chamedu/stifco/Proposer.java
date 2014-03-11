@@ -116,24 +116,24 @@ public class Proposer extends Activity implements ViewSwitcher.ViewFactory,View.
 
 		updateCounter();
 
-		// Traitement du textView en autocomplétion à  partir de la source Json
+		// Traitement du textView en autocomplï¿½tion ï¿½ partir de la source Json
 		jsonString = lireJSON();
 
 		try {
 			jsonResponse = new JSONObject(jsonString);
-			// Création du tableau général à partir d'un JSONObject
+			// Crï¿½ation du tableau gï¿½nï¿½ral ï¿½partir d'un JSONObject
 			JSONArray jsonArray = jsonResponse.getJSONArray("gares");
 
-			// Pour chaque élément du tableau
+			// Pour chaque ï¿½lï¿½ment du tableau
 			for (int i = 0; i < jsonArray.length(); i++) {
 
-				// Création d'un tableau élément à  partir d'un JSONObject
+				// Crï¿½ation d'un tableau ï¿½lï¿½ment ï¿½ partir d'un JSONObject
 				JSONObject jsonObj = jsonArray.getJSONObject(i);
 
-				// Récupération à partir d'un JSONObject nommé
+				// Rï¿½cupï¿½ration ï¿½partir d'un JSONObject nommï¿½
 				JSONObject fields  = jsonObj.getJSONObject("fields");
 
-				// Récupération de l'item qui nous intéresse
+				// Rï¿½cupï¿½ration de l'item qui nous intï¿½resse
 				String nom = fields.getString("nom_de_la_gare");
 
 				// Ajout dans l'ArrayList
@@ -233,7 +233,7 @@ public class Proposer extends Activity implements ViewSwitcher.ViewFactory,View.
 			if (mCounter<3) {
 				mCounter++;
 			} else {
-				Toast.makeText(Proposer.this, "Désolé, la limite maximale est fixée à  trois personnes !", Toast.LENGTH_SHORT).show();
+				Toast.makeText(Proposer.this, "Dï¿½solï¿½, la limite maximale est fixï¿½e ï¿½ trois personnes !", Toast.LENGTH_SHORT).show();
 			}
 
 			updateCounter();
@@ -243,7 +243,7 @@ public class Proposer extends Activity implements ViewSwitcher.ViewFactory,View.
 			if (mCounter>1) {
 				mCounter--;
 			} else {
-				Toast.makeText(Proposer.this, "Désolé, la limite minimale est fixée à  une personne !", Toast.LENGTH_SHORT).show();
+				Toast.makeText(Proposer.this, "Dï¿½solï¿½, la limite minimale est fixï¿½e ï¿½ une personne !", Toast.LENGTH_SHORT).show();
 			}
 
 			updateCounter();
@@ -276,7 +276,7 @@ public class Proposer extends Activity implements ViewSwitcher.ViewFactory,View.
 					@Override
 					public void onResult(String json) {
 						if ( json.equals("insertion_ok")) {
-							Toast.makeText(Proposer.this, "Votre proposition a été enregistrée, merci.", Toast.LENGTH_LONG).show();
+							Toast.makeText(Proposer.this, "Votre proposition a ï¿½tï¿½ enregistrï¿½e, merci.", Toast.LENGTH_LONG).show();
 							finish();
 						} else {
 							Toast.makeText(Proposer.this, json, Toast.LENGTH_LONG).show();

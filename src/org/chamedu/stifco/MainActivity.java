@@ -19,6 +19,7 @@ import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,7 +97,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 					Builder adCancel = new AlertDialog.Builder(MainActivity.this);
 					adCancel.setTitle("Information");
-					adCancel.setMessage("Arrêt demandé par l'utilisateur...");
+					adCancel.setMessage("Arrï¿½t demandï¿½ par l'utilisateur...");
 					adCancel.setIcon(R.drawable.cool);
 					adCancel.setPositiveButton("Ok",null);		           
 					adCancel.show();
@@ -112,11 +113,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	private void doOnTrueResult( String info ) {
 		if ( info.equals("pas_ok" )) {
-			String message = "Désolé, mais votre adresse email n'est pas enregistrée sur le site !";
+			String message = "Dï¿½solï¿½, mais votre adresse email n'est pas enregistrï¿½e sur le site !";
 			Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
 			finish();
 		} else {
-			// Dans ce cas le script PHP a retourné l'adresse email dans la variable info
+			// Dans ce cas le script PHP a retournï¿½ l'adresse email dans la variable info
 			accRepo.setAccount(info);
 			numEMAIL.setText("Email : "+info);
 		}
@@ -134,7 +135,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		switch (item.getItemId()) {
 		case R.id.menu_suppcompte:
 			accRepo.unsetAccount();
-			Toast.makeText(getApplicationContext(), "Compte supprimé", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Compte supprimï¿½", Toast.LENGTH_LONG).show();
 			finish();
 			break;
 		
@@ -153,7 +154,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 
 		if ( v == rechercher ) { 
-			// TODO
+			Intent iRechercher = new Intent(this,Rechercher.class); 
+			this.startActivityForResult( iRechercher,10 );
+			Log.i("test", "submit");
 		}	
 	}
 

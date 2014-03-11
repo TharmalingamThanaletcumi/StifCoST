@@ -34,6 +34,8 @@
     <string name="changerheure">Changer l\'heure</string>
     <string name="plus">+</string>
     <string name="moins">-</string>
+    <string name="cherche">Voir les Propositions</string>
+    <string name="addmois">Choisissez un mois</string>
     
  
 </resources>
