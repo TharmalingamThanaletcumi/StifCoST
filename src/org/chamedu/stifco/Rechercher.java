@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -31,6 +32,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
@@ -39,6 +41,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -47,7 +50,8 @@ import android.widget.ViewSwitcher;
 
 public class Rechercher extends Activity implements View.OnClickListener  {
 	
-	    Button soumettre;
+	private Spinner spinnerMois ;    
+	Button soumettre;
 	    
 	    // Varaibles pour la lecture du flux Json
 		private String jsonString;
@@ -56,30 +60,31 @@ public class Rechercher extends Activity implements View.OnClickListener  {
 		AutoCompleteTextView tvGareAuto;
 		ArrayList<String> items = new ArrayList<String>();
 		
-		// Variables pour la date et l'heure
-		private TextView mDateDisplay;
-		private int mYear;
-		private int mMonth;
-		private int mDay;
 		
-		static final int DATE_DIALOG_ID = 2;
 		
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setContentView(R.layout.rechercher);
-			
-			// Traitement du changement de la date et de l'heure
-			mDateDisplay = (TextView) findViewById(R.id.tvLaDate);
-			
-			setDialogOnClickListener(R.id.btChangeDate, DATE_DIALOG_ID);
-			
-			final Calendar c = Calendar.getInstance();
-			mYear = c.get(Calendar.YEAR);
-			mMonth = c.get(Calendar.MONTH);
-			mDay = c.get(Calendar.DAY_OF_MONTH);
 
-			updateDisplay();
+			spinnerMois = (Spinner) findViewById(R.id.spinnerMois);
+			List<String> list = new ArrayList<String>();
+			list.add("janvier");
+			list.add("fevrier");
+			list.add("mars");
+			list.add("avril");
+			list.add("mai");
+			list.add("juin");
+			list.add("juillet");
+			list.add("aout");
+			list.add("septembre");
+			list.add("octobre");
+			list.add("novembre");
+			list.add("decembre");
+			ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, list);
+			dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spinnerMois.setAdapter(dataAdapter);
 			
 			// Traitement du textView en autocompl�tion � partir de la source Json
 			jsonString = lireJSON();
@@ -112,7 +117,7 @@ public class Rechercher extends Activity implements View.OnClickListener  {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			Log.i("test2", "recher .java");
+			
 			soumettre = (Button)findViewById(R.id.btOffre);
 			soumettre.setOnClickListener(this);
 			
@@ -125,38 +130,6 @@ public class Rechercher extends Activity implements View.OnClickListener  {
 				}
 			});
 		}
-		
-		@Override
-		protected Dialog onCreateDialog(int id) {
-			switch (id) {
-			case DATE_DIALOG_ID:
-				return new DatePickerDialog(this,
-						mDateSetListener,
-						mYear, mMonth, mDay);
-			}
-			return null;
-		}
-	
-		private void updateDisplay() {
-			mDateDisplay.setText(
-					new StringBuilder()
-					// Month is 0 based so add 1
-					.append(mMonth + 1).append("-")
-					.append(mDay).append("-")
-					.append(mYear));
-		}
-		
-		private DatePickerDialog.OnDateSetListener mDateSetListener =
-				new DatePickerDialog.OnDateSetListener() {
-
-			public void onDateSet(DatePicker view, int year, int monthOfYear,
-					int dayOfMonth) {
-				mYear = year;
-				mMonth = monthOfYear;
-				mDay = dayOfMonth;
-				updateDisplay();
-			}
-		};
 		
 		public String lireJSON() {
 			InputStream is = getResources().openRawResource(R.raw.gares);
@@ -183,11 +156,46 @@ public class Rechercher extends Activity implements View.OnClickListener  {
 			return writer.toString();
 		}
 		
+		
 		public void onClick(View v) {
 			if ( v == soumettre ) {
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 			nameValuePairs.add(new BasicNameValuePair("gare",""+tvGareAuto.getText()));
+			nameValuePairs.add(new BasicNameValuePair("mois",""+spinnerMois.getSelectedItem().toString()));
+		
+			String mois = spinnerMois.getSelectedItem().toString();
+			
+			Log.i("mois", mois);
+			
+		
+			
+			try {				
+				RestClient.doPost("/recherche.php", nameValuePairs, new OnResultListener() {					
+					@Override
+					public void onResult(String json) {
+						if ( json.equals("insertion_ok")) {
+							Toast.makeText(Rechercher.this, "Les propositions :", Toast.LENGTH_LONG).show();
+							finish();
+						} else {
+							Toast.makeText(Rechercher.this, json, Toast.LENGTH_LONG).show();
+						}					
+					}
+					
+				});
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			} catch (HttpException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			}
 	   }
+		
+		
+		public void addListenerOnButton(){
+			spinnerMois = (Spinner) findViewById(R.id.spinnerMois);
+		}
 }
 
