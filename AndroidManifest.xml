@@ -30,6 +30,11 @@
             android:screenOrientation="portrait"
             android:label="@string/proposer" >
         </activity>
+        <activity
+            android:name="org.chamedu.stifco.ListeProposition"
+            android:screenOrientation="portrait"
+            android:label="@string/listeproposition" >
+        </activity>
         <activity android:name="Rechercher" android:screenOrientation="portrait" android:label="@string/rechercher"></activity>
     </application>
 

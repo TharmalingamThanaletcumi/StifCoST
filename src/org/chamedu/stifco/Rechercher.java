@@ -28,6 +28,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -167,18 +168,28 @@ public class Rechercher extends Activity implements View.OnClickListener  {
 			
 			Log.i("mois", mois);
 			
+			
 		
 			
 			try {				
 				RestClient.doPost("/recherche.php", nameValuePairs, new OnResultListener() {					
 					@Override
 					public void onResult(String json) {
-						if ( json.equals("insertion_ok")) {
+						if ( json.equals("propostions")) {
+							
 							Toast.makeText(Rechercher.this, "Les propositions :", Toast.LENGTH_LONG).show();
 							finish();
 						} else {
-							Toast.makeText(Rechercher.this, json, Toast.LENGTH_LONG).show();
-						}					
+							
+							/*Toast.makeText(Rechercher.this, json, Toast.LENGTH_LONG).show();
+							Log.i("json", json);*/
+							Intent liste = new Intent(Rechercher.this, ListeProposition.class); 
+							liste.putExtra("json", json);
+							startActivity(new Intent (liste));
+							/*JSONObject jsonp = new JSONObject();
+							JSONObject resultJSON = jsonp.getJSONObject("");*/
+							
+						}				
 					}
 					
 				});
@@ -191,11 +202,18 @@ public class Rechercher extends Activity implements View.OnClickListener  {
 			}
 			
 			}
+			/*Intent liste = new Intent(this, ListeProposition.class); 
+			liste.putExtra("json", json);
+			this.startActivityForResult( liste,10 );*/
+		
+			 
+			
 	   }
 		
 		
 		public void addListenerOnButton(){
 			spinnerMois = (Spinner) findViewById(R.id.spinnerMois);
 		}
+
 }
 
